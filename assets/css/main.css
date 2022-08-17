@@ -45,8 +45,6 @@ body {
   transform: rotateY(180deg);
 }
 
-
-
 h1 {
   font-weight: 700;
   font-size: 56px;
@@ -94,10 +92,19 @@ h1 {
   }
 }
 
-.mostrar{
+.mostrar {
   transform: rotateY(0deg);
 }
 
-.esconder{
+.esconder {
   transform: rotateY(-180deg);
-} 
+}
+
+#seconds-counter {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  padding: 20px;
+}

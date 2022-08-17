@@ -3,52 +3,71 @@
 let comecoValido = false;
 let numeroCartas = 0;
 let jogadas = 0;
+let cancel = 0;
+let seconds = 0;
 
 while (comecoValido == false) {
   numeroCartas = prompt(
     "Digite um numero par de cartas maior que 4 com no maximo 14"
   );
-  if (numeroCartas > 4 && numeroCartas <= 14 && numeroCartas % 2 == 0) {
+  if (numeroCartas > 1 && numeroCartas <= 14 && numeroCartas % 2 == 0) {
     comecoValido = true;
   }
 }
 
-//criando cartas
-const container = document.querySelector(".container");
-const cardsInj = [];
+ 
 
-for (let i = 0; i < numeroCartas; i++) {
-  for (let j = 0; j < 2; j++) {
-    let divFront = document.createElement("div");
-    let divBack = document.createElement("div");
-    let img = document.createElement("img");
-    let imgFront = document.createElement("img");
+CriarCartas()
 
-    imgFront.src = "./assets/images/front.png";
-    divFront.appendChild(imgFront);
-    divFront.classList.add("front-face", "face");
-
-    img.src = `./assets/images/${i}.gif`;
-    divBack.appendChild(img);
-    divBack.classList.add("back-face", "face");
-
-    let card = document.createElement("div");
-
-    card.id = i;
-    card.classList.add("card");
-    card.appendChild(divFront);
-    card.appendChild(divBack);
-
-    cardsInj.push(card);
-  }
+function ComecarRelogio(){
+  var el = document.getElementById("seconds-counter");
+  cancel = setInterval(() => {
+    seconds += 1;
+    el.innerText = "Tempo decorrido " + seconds + " segundos.";
+  }, 1000);
 }
 
-cardsInj.sort(comparador);
-cardsInj.forEach((card) => container.appendChild(card));
+//criando cartas
+function CriarCartas() {
+  numeroCartas /= 2;
+  const container = document.querySelector(".container");
+  const cardsInj = [];
+
+  for (let i = 0; i < numeroCartas; i++) {
+    for (let j = 0; j < 2; j++) {
+      let divFront = document.createElement("div");
+      let divBack = document.createElement("div");
+      let img = document.createElement("img");
+      let imgFront = document.createElement("img");
+
+      imgFront.src = "./assets/images/front.png";
+      divFront.appendChild(imgFront);
+      divFront.classList.add("front-face", "face");
+
+      img.src = `./assets/images/${i}.gif`;
+      divBack.appendChild(img);
+      divBack.classList.add("back-face", "face");
+
+      let card = document.createElement("div");
+
+      card.id = i;
+      card.classList.add("card");
+      card.appendChild(divFront);
+      card.appendChild(divBack);
+
+      cardsInj.push(card);
+    }
+  }
+
+  cardsInj.sort(comparador);
+  cardsInj.forEach((card) => container.appendChild(card));
+}
+
+//game
 
 const cards = document.querySelectorAll(".card");
 
-//game
+
 
 let clicks = 0;
 
@@ -63,7 +82,7 @@ cards.forEach((card) => {
   });
 });
 
-function click(card) {
+async function click(card) {
   jogadas++;
   let front = card.querySelector(".front-face");
   let back = card.querySelector(".back-face");
@@ -100,15 +119,30 @@ function click(card) {
     }
   }
 
-  var acertos = document.querySelectorAll('.acertou')
-  console.log(acertos.length, 'largura do acertos')
-  if(acertos.length / 2 == numeroCartas){
-    alert(`Parabéns! Você venceu o JOGO com ${jogadas} jogadas`)
+  var acertos = document.querySelectorAll(".acertou");
+  console.log(acertos.length, "largura do acertos");
+  if (acertos.length / 2 == numeroCartas) {
+    await sleep(500);
+
+    alert(
+      `Parabéns! Você venceu o JOGO com ${jogadas} jogadas em ${seconds} segundos`
+    );
+    const restart = prompt(`Deseja recomeçar o jogo?
+    digite "sim" ou "não"`);
+
+    if (restart.toLowerCase() == "sim") {
+      location.reload();
+    } else {
+      clearInterval(cancel);
+      return;
+    }
   }
 }
 
-
-
 function comparador() {
   return Math.random() - 0.5;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
