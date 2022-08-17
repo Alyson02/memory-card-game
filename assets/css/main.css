@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+body {
+  background-color: #eef9bf;
+  font-family: "Roboto";
+}
+
+.card {
+  width: 117px;
+  height: 146px;
+  position: relative;
+  margin-right: 34px;
+  margin-bottom: 34px;
+}
+
+.card:nth-child(6n) {
+  margin-right: 0;
+}
+
+.card:nth-last-child(-n + 6) {
+  margin-bottom: 0;
+}
+
+.card img {
+  width: 100px;
+  height: 100px;
+}
+
+.face {
+  width: 100%;
+  height: 100%;
+  background-color: #a7e9af;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  backface-visibility: hidden;
+  transition: all 0.5s;
+  transform-style: preserve-3d;
+}
+
+.back-face {
+  transform: rotateY(180deg);
+}
+
+/* .card:hover .back-face {
+  transform: rotateY(0deg);
+}
+
+.card:hover .front-face {
+  transform: rotateY(-180deg);
+} */
+
+h1 {
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 66px;
+  color: #75b79e;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.container {
+  width: 872px;
+  margin: 0 auto;
+  margin-top: 48px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 872px) {
+  .container {
+    width: 100%;
+    justify-content: center;
+    gap: 34px;
+  }
+
+  .card {
+    margin: 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    margin-right: 0;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 42px;
+  }
+}
