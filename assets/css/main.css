@@ -45,13 +45,7 @@ body {
   transform: rotateY(180deg);
 }
 
-/* .card:hover .back-face {
-  transform: rotateY(0deg);
-}
 
-.card:hover .front-face {
-  transform: rotateY(-180deg);
-} */
 
 h1 {
   font-weight: 700;
@@ -99,3 +93,11 @@ h1 {
     line-height: 42px;
   }
 }
+
+.mostrar{
+  transform: rotateY(0deg);
+}
+
+.esconder{
+  transform: rotateY(-180deg);
+} 
