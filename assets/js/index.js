@@ -1,25 +1,47 @@
-//começo
+const maxClick = 2;
 
 let comecoValido = false;
 let numeroCartas = 0;
 let jogadas = 0;
 let cancel = 0;
 let seconds = 0;
+let clicks = 0;
 
-while (comecoValido == false) {
-  numeroCartas = prompt(
-    "Digite um numero par de cartas maior que 4 com no maximo 14"
-  );
-  if (numeroCartas > 1 && numeroCartas <= 14 && numeroCartas % 2 == 0) {
-    comecoValido = true;
+function ativarEvento() {
+  cards.forEach((card) => {
+    card.addEventListener("click", (e) => {
+      if (
+        !card.classList.contains("selecionado") &&
+        !card.classList.contains("acertou")
+      )
+        click(card);
+      else console.log("já clicado");
+    });
+  });
+}
+
+OpcoesJogo();
+IniciarRelogio();
+CriarCartas();
+const cards = document.querySelectorAll(".card");
+ativarEvento();
+
+function OpcoesJogo() {
+  while (comecoValido == false) {
+    numeroCartas = prompt(
+      "Digite um numero par de cartas maior que 4 com no maximo 14"
+    );
+
+    if (numeroCartas > 1 && numeroCartas <= 14 && numeroCartas % 2 == 0) {
+      numeroCartas /= 2;
+      console.log(numeroCartas)
+      comecoValido = true;
+    }
   }
 }
 
- 
-
-CriarCartas()
-
-function ComecarRelogio(){
+function IniciarRelogio() {
+  console.log(numeroCartas);
   var el = document.getElementById("seconds-counter");
   cancel = setInterval(() => {
     seconds += 1;
@@ -27,9 +49,7 @@ function ComecarRelogio(){
   }, 1000);
 }
 
-//criando cartas
 function CriarCartas() {
-  numeroCartas /= 2;
   const container = document.querySelector(".container");
   const cardsInj = [];
 
@@ -63,51 +83,33 @@ function CriarCartas() {
   cardsInj.forEach((card) => container.appendChild(card));
 }
 
-//game
-
-const cards = document.querySelectorAll(".card");
-
-
-
-let clicks = 0;
-
-cards.forEach((card) => {
-  card.addEventListener("click", (e) => {
-    if (
-      !card.classList.contains("selecionado") &&
-      !card.classList.contains("acertou")
-    )
-      click(card);
-    else console.log("já clicado");
-  });
-});
-
 async function click(card) {
   jogadas++;
   let front = card.querySelector(".front-face");
   let back = card.querySelector(".back-face");
 
-  if (clicks < 2) {
+  let selecionados = document.querySelectorAll(".selecionado");
+
+  if (clicks < maxClick && selecionados.length < maxClick) {
     card.classList.add("selecionado");
     front.classList.add("esconder");
     back.classList.add("mostrar");
     clicks++;
   }
 
-  let selecionados = document.querySelectorAll(".selecionado");
-  if (clicks === 2) {
+  selecionados = document.querySelectorAll(".selecionado");
+
+  if (clicks === maxClick) {
     if (selecionados[0].id != selecionados[1].id) {
       console.log("errou");
-      cards.forEach((card) => {
+      cards.forEach(async (card) => {
         if (card.classList.contains("selecionado")) {
-          setTimeout(() => {
-            card.classList.remove("selecionado");
-            card.querySelector(".front-face").classList.toggle("esconder");
-            card.querySelector(".back-face").classList.toggle("mostrar");
-          }, 1000);
+          await sleep(1000);
+          card.classList.remove("selecionado");
+          card.querySelector(".front-face").classList.toggle("esconder");
+          card.querySelector(".back-face").classList.toggle("mostrar");
         }
       });
-      clicks = 0;
     } else {
       selecionados[0].classList.remove("selecionado");
       selecionados[0].classList.add("acertou");
@@ -115,22 +117,31 @@ async function click(card) {
       selecionados[1].classList.remove("selecionado");
       selecionados[1].classList.add("acertou");
       console.log("acertou");
-      clicks = 0;
     }
+    clicks = 0;
   }
 
   var acertos = document.querySelectorAll(".acertou");
-  console.log(acertos.length, "largura do acertos");
   if (acertos.length / 2 == numeroCartas) {
+    let finalizar = false;
+    let restart = "";
+
     await sleep(500);
 
     alert(
       `Parabéns! Você venceu o JOGO com ${jogadas} jogadas em ${seconds} segundos`
     );
-    const restart = prompt(`Deseja recomeçar o jogo?
-    digite "sim" ou "não"`);
 
-    if (restart.toLowerCase() == "sim") {
+    while (finalizar == false) {
+      restart = prompt(`Deseja recomeçar o jogo?
+      digite "sim" ou "não"`);
+
+      if (restart.toLowerCase() === "sim" || restart.toLowerCase() === "não") {
+        finalizar = true;
+      }
+    }
+
+    if (restart === "sim") {
       location.reload();
     } else {
       clearInterval(cancel);
