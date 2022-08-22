@@ -32,7 +32,7 @@ function OpcoesJogo() {
       "Digite um numero par de cartas maior que 4 com no maximo 14"
     );
 
-    if (numeroCartas > 1 && numeroCartas <= 14 && numeroCartas % 2 == 0) {
+    if (numeroCartas > 4 && numeroCartas <= 14 && numeroCartas % 2 == 0) {
       numeroCartas /= 2;
       console.log(numeroCartas)
       comecoValido = true;
